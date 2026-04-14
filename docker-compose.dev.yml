@@ -1,0 +1,31 @@
+version: "3.9"
+
+# ── Development compose ───────────────────────────────────────────────────────
+# Usage:
+#   docker compose -f docker-compose.dev.yml up
+#
+# Mounts the source tree so changes are reflected immediately (--reload).
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev
+    image: accessbot-rag:dev
+    container_name: accessbot_api_dev
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ENVIRONMENT=development
+      - LOG_LEVEL=DEBUG
+      - FAISS_INDEX_PATH=/app/data/processed/faiss_index
+      - UPLOAD_DIR=/app/data/raw
+    volumes:
+      - .:/app              # live code reload
+      - faiss_dev:/app/data/processed/faiss_index
+      - upload_dev:/app/data/raw
+
+volumes:
+  faiss_dev:
+  upload_dev:

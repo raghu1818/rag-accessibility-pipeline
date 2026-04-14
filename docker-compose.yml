@@ -1,0 +1,50 @@
+version: "3.9"
+
+# ── Production compose ────────────────────────────────────────────────────────
+# Usage:
+#   docker compose up -d
+#
+# Required environment variables (see .env.example):
+#   OPENAI_API_KEY
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: runtime
+    image: accessbot-rag:latest
+    container_name: accessbot_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - LLM_MODEL=${LLM_MODEL:-gpt-4o}
+      - EMBEDDING_MODEL=${EMBEDDING_MODEL:-text-embedding-3-small}
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - FAISS_INDEX_PATH=/app/data/processed/faiss_index
+      - UPLOAD_DIR=/app/data/raw
+    volumes:
+      - faiss_data:/app/data/processed/faiss_index
+      - upload_data:/app/data/raw
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 512M
+
+volumes:
+  faiss_data:
+    driver: local
+  upload_data:
+    driver: local
