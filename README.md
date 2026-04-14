@@ -5,10 +5,7 @@
 > Helping blind and low-vision users navigate product manuals through natural-language
 > queries — with zero hallucination guarantees and chain-of-thought transparency.
 
-[![CI](https://github.com/your-org/rag-accessibility-pipeline/actions/workflows/ci.yml/badge.svg)](https://github.com/your-org/rag-accessibility-pipeline/actions/workflows/ci.yml)
-[![Coverage](https://codecov.io/gh/your-org/rag-accessibility-pipeline/branch/main/graph/badge.svg)](https://codecov.io/gh/your-org/rag-accessibility-pipeline)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 
 ---
 
