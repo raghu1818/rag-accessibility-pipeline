@@ -9,11 +9,11 @@ Responsibilities:
      factual claim against the context; retry once if violations are found.
   5. Return the final answer and structured metadata.
 """
+
 from __future__ import annotations
 
 import json
 import re
-from typing import Optional
 
 from langchain_core.documents import Document
 from langchain_openai import ChatOpenAI
@@ -36,7 +36,7 @@ _MAX_CONTEXT_CHARS = 12_000  # guard against exceeding context window
 class GenerationAgent:
     """Generates grounded, accessibility-optimised answers."""
 
-    def __init__(self, llm: Optional[ChatOpenAI] = None) -> None:
+    def __init__(self, llm: ChatOpenAI | None = None) -> None:
         self._llm = llm or ChatOpenAI(
             model=settings.llm_model,
             temperature=settings.llm_temperature,
@@ -159,7 +159,7 @@ class GenerationAgent:
         return "\n\n---\n\n".join(parts)
 
     @staticmethod
-    def _extract_thinking(text: str) -> Optional[str]:
+    def _extract_thinking(text: str) -> str | None:
         match = _THINKING_RE.search(text)
         return match.group(1).strip() if match else None
 

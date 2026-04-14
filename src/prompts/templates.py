@@ -9,6 +9,7 @@ Design goals
    to an answer, increasing accuracy for blind users who cannot easily verify.
 3. Accessibility-first language: plain language, avoid jargon, short sentences.
 """
+
 from __future__ import annotations
 
 from langchain_core.prompts import ChatPromptTemplate, SystemMessagePromptTemplate
@@ -106,9 +107,7 @@ generation_prompt = ChatPromptTemplate.from_messages(
     [
         SystemMessagePromptTemplate.from_template(
             GENERATION_SYSTEM_PROMPT,
-            partial_variables={
-                "chain_of_thought_preamble": CHAIN_OF_THOUGHT_PREAMBLE
-            },
+            partial_variables={"chain_of_thought_preamble": CHAIN_OF_THOUGHT_PREAMBLE},
         ),
         ("human", GENERATION_USER_TEMPLATE),
     ]

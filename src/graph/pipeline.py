@@ -24,6 +24,7 @@ Graph topology
 
 All nodes share PipelineState.  Errors set state.error and route to END.
 """
+
 from __future__ import annotations
 
 from typing import Any
@@ -58,7 +59,7 @@ def _route_after_guard(state: PipelineState) -> str:
     return END
 
 
-def build_pipeline() -> "RAGPipeline":
+def build_pipeline() -> RAGPipeline:
     """Construct and compile the LangGraph state machine."""
     ingestion_agent = IngestionAgent()
     retrieval_agent = RetrievalAgent()

@@ -7,11 +7,11 @@ Provides:
   • persist / load — serialise the FAISS index + docstore to disk
   • delete_by_source — remove all chunks belonging to a given source file
 """
+
 from __future__ import annotations
 
 import threading
 from pathlib import Path
-from typing import Optional
 
 from langchain_community.vectorstores import FAISS
 from langchain_core.documents import Document
@@ -29,7 +29,7 @@ class FAISSVectorStore:
 
     def __init__(
         self,
-        index_path: Optional[Path] = None,
+        index_path: Path | None = None,
         top_k: int | None = None,
     ) -> None:
         self._index_path = index_path or settings.faiss_index_path
@@ -39,7 +39,7 @@ class FAISSVectorStore:
             model=settings.embedding_model,
             openai_api_key=settings.openai_api_key,
         )
-        self._store: Optional[FAISS] = None
+        self._store: FAISS | None = None
         self._try_load()
 
     # ── Public interface ──────────────────────────────────────────────────────
@@ -51,16 +51,12 @@ class FAISSVectorStore:
         try:
             with self._lock:
                 if self._store is None:
-                    self._store = FAISS.from_documents(
-                        documents, self._embeddings
-                    )
+                    self._store = FAISS.from_documents(documents, self._embeddings)
                     ids = list(self._store.index_to_docstore_id.values())
                 else:
                     ids = self._store.add_documents(documents)
                 self._persist()
-            logger.info(
-                "indexed_documents", count=len(documents), ids_sample=ids[:3]
-            )
+            logger.info("indexed_documents", count=len(documents), ids_sample=ids[:3])
             return ids
         except Exception as exc:
             raise VectorStoreError(f"Failed to index documents: {exc}") from exc
@@ -78,14 +74,8 @@ class FAISSVectorStore:
         k = k or self._top_k
         try:
             with self._lock:
-                results = self._store.similarity_search_with_relevance_scores(
-                    query, k=k
-                )
-            docs = [
-                doc
-                for doc, score in results
-                if score >= score_threshold
-            ]
+                results = self._store.similarity_search_with_relevance_scores(query, k=k)
+            docs = [doc for doc, score in results if score >= score_threshold]
             logger.info(
                 "retrieval_complete",
                 query_preview=query[:80],

@@ -7,10 +7,11 @@ Usage
   Production:   gunicorn src.api.main:app -k uvicorn.workers.UvicornWorker
   Docker:       CMD defined in Dockerfile
 """
+
 from __future__ import annotations
 
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -73,9 +74,7 @@ def create_app() -> FastAPI:
 
     # ── Global exception handler ──────────────────────────────────────────────
     @application.exception_handler(Exception)
-    async def unhandled_exception_handler(
-        request: Request, exc: Exception
-    ) -> JSONResponse:
+    async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
         logger.exception("unhandled_exception", path=request.url.path)
         return JSONResponse(
             status_code=500,

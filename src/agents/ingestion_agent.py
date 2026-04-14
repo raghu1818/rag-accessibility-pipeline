@@ -8,6 +8,7 @@ Responsibilities:
      de-duplicating by source so re-uploading a file refreshes its content.
   4. Return structured metadata for the API response and LangGraph state.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -80,9 +81,7 @@ class IngestionAgent:
             "source": str(pdf_path),
             "filename": pdf_path.name,
             "chunk_count": len(ids),
-            "pages": max(
-                (d.metadata.get("page", 0) for d in documents), default=0
-            ),
+            "pages": max((d.metadata.get("page", 0) for d in documents), default=0),
             "extraction_methods": list(
                 {d.metadata.get("extraction_method", "unknown") for d in documents}
             ),

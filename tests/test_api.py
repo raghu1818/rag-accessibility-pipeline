@@ -1,10 +1,10 @@
 """Integration tests for the FastAPI endpoints."""
+
 from __future__ import annotations
 
 import io
 from pathlib import Path
 
-import pytest
 from fastapi.testclient import TestClient
 
 
@@ -76,9 +76,7 @@ class TestIngestEndpoint:
         )
         assert resp.status_code == 415
 
-    def test_pdf_upload_accepted(
-        self, api_client: TestClient, test_pdf: Path
-    ) -> None:
+    def test_pdf_upload_accepted(self, api_client: TestClient, test_pdf: Path) -> None:
         with test_pdf.open("rb") as f:
             resp = api_client.post(
                 "/ingest",

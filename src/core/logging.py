@@ -3,6 +3,7 @@ Structured logging via structlog.
 All log records are emitted as JSON in production and as coloured console
 output in development.
 """
+
 from __future__ import annotations
 
 import logging

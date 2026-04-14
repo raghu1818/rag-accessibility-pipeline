@@ -1,11 +1,12 @@
 """
 Pytest fixtures shared across the test suite.
 """
+
 from __future__ import annotations
 
 import os
+from collections.abc import Generator
 from pathlib import Path
-from typing import Generator
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest

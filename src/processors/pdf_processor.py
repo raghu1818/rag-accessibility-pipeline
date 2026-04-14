@@ -10,12 +10,12 @@ Strategy
    and attach rich metadata so the retrieval agent can surface source + page
    information to users.
 """
+
 from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional
 
 import fitz  # PyMuPDF
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -68,9 +68,7 @@ class PDFProcessor:
         if not pdf_path.exists():
             raise DocumentIngestionError(f"File not found: {pdf_path}")
         if pdf_path.suffix.lower() != ".pdf":
-            raise DocumentIngestionError(
-                f"Expected a .pdf file, got: {pdf_path.suffix}"
-            )
+            raise DocumentIngestionError(f"Expected a .pdf file, got: {pdf_path.suffix}")
 
         source_id = self._source_id(pdf_path)
         logger.info("processing_pdf", path=str(pdf_path), source_id=source_id)
@@ -145,9 +143,7 @@ class PDFProcessor:
                     )
         return results
 
-    def _ocr_page(
-        self, doc: fitz.Document, page: fitz.Page, page_num: int
-    ) -> str:
+    def _ocr_page(self, doc: fitz.Document, page: fitz.Page, page_num: int) -> str:
         logger.info("ocr_fallback_triggered", page=page_num + 1)
         try:
             # Render at configured DPI for best OCR accuracy
@@ -156,9 +152,7 @@ class PDFProcessor:
             img_bytes = pix.tobytes("png")
             return self._ocr.extract_text_from_bytes(img_bytes)
         except Exception as exc:
-            logger.warning(
-                "ocr_failed", page=page_num + 1, error=str(exc)
-            )
+            logger.warning("ocr_failed", page=page_num + 1, error=str(exc))
             return ""
 
     @staticmethod

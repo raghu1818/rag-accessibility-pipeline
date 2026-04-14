@@ -4,6 +4,7 @@ Health check endpoints.
 GET /health       — liveness probe (always 200 if the process is running)
 GET /health/ready — readiness probe (200 only when vector store is loaded)
 """
+
 from __future__ import annotations
 
 from fastapi import APIRouter, Request

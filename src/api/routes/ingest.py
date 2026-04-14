@@ -3,9 +3,9 @@ Document ingestion endpoint.
 
 POST /ingest — accepts a multipart PDF upload, processes it, and indexes it.
 """
+
 from __future__ import annotations
 
-import shutil
 import uuid
 from pathlib import Path
 

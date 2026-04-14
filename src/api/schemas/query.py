@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -17,7 +15,7 @@ class QueryRequest(BaseModel):
         0.3,
         ge=0.0,
         le=1.0,
-        description="Minimum relevance score (0–1) for retrieved passages",
+        description="Minimum relevance score (0-1) for retrieved passages",
     )
     include_thinking: bool = Field(
         False,
@@ -27,13 +25,13 @@ class QueryRequest(BaseModel):
 
 class SourceReference(BaseModel):
     filename: str
-    page: Optional[int] = None
-    extraction_method: Optional[str] = None
+    page: int | None = None
+    extraction_method: str | None = None
 
 
 class QueryResponse(BaseModel):
     answer: str = Field(..., description="Grounded answer from AccessBot")
-    grounded: Optional[bool] = Field(
+    grounded: bool | None = Field(
         None,
         description="True if all claims were verified against source passages",
     )
@@ -41,8 +39,8 @@ class QueryResponse(BaseModel):
         default_factory=list,
         description="Document passages used to generate the answer",
     )
-    thinking: Optional[str] = Field(
+    thinking: str | None = Field(
         None,
         description="Chain-of-thought reasoning (only when include_thinking=True)",
     )
-    error: Optional[str] = Field(None)
+    error: str | None = Field(None)

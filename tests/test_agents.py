@@ -1,10 +1,10 @@
 """Tests for the three pipeline agents."""
+
 from __future__ import annotations
 
 from pathlib import Path
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
-import pytest
 from langchain_core.documents import Document
 
 from src.agents.generation_agent import GenerationAgent
@@ -12,8 +12,8 @@ from src.agents.ingestion_agent import IngestionAgent
 from src.agents.retrieval_agent import RetrievalAgent
 from src.graph.state import PipelineState
 
-
 # ── Ingestion Agent ───────────────────────────────────────────────────────────
+
 
 class TestIngestionAgent:
     def test_ingest_file_returns_summary(
@@ -22,9 +22,7 @@ class TestIngestionAgent:
         agent = IngestionAgent(vector_store=mock_vector_store)
         import asyncio
 
-        result = asyncio.get_event_loop().run_until_complete(
-            agent.ingest_file(str(test_pdf))
-        )
+        result = asyncio.get_event_loop().run_until_complete(agent.ingest_file(str(test_pdf)))
         assert result["chunk_count"] > 0
         assert result["filename"] == test_pdf.name
         mock_vector_store.add_documents.assert_called_once()
@@ -42,6 +40,7 @@ class TestIngestionAgent:
 
 # ── Retrieval Agent ───────────────────────────────────────────────────────────
 
+
 class TestRetrievalAgent:
     def test_retrieves_documents(
         self, mock_vector_store: MagicMock, sample_documents: list[Document]
@@ -51,9 +50,7 @@ class TestRetrievalAgent:
         assert docs == sample_documents
         mock_vector_store.similarity_search.assert_called_once()
 
-    def test_empty_query_returns_error_in_state(
-        self, mock_vector_store: MagicMock
-    ) -> None:
+    def test_empty_query_returns_error_in_state(self, mock_vector_store: MagicMock) -> None:
         import asyncio
 
         agent = RetrievalAgent(vector_store=mock_vector_store)
@@ -63,6 +60,7 @@ class TestRetrievalAgent:
 
 
 # ── Generation Agent ──────────────────────────────────────────────────────────
+
 
 class TestGenerationAgent:
     def test_generates_answer(
@@ -129,8 +127,6 @@ class TestGenerationAgent:
             retrieved_documents=sample_documents,
             final_answer="Press and hold the side button. [Source 1]",
         )
-        result = asyncio.get_event_loop().run_until_complete(
-            agent.hallucination_guard(state)
-        )
+        result = asyncio.get_event_loop().run_until_complete(agent.hallucination_guard(state))
         assert result["grounded"] is True
         assert result["hallucination_violations"] == []

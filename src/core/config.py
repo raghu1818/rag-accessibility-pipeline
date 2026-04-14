@@ -2,6 +2,7 @@
 Application configuration via environment variables.
 All secrets must be set in the environment or a .env file — never hardcoded.
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -38,7 +39,7 @@ class Settings(BaseSettings):
     chunk_overlap: int = Field(64, ge=0)
 
     # ── API ───────────────────────────────────────────────────────────────────
-    api_host: str = Field("0.0.0.0")
+    api_host: str = Field("0.0.0.0")  # noqa: S104
     api_port: int = Field(8000, gt=0)
     api_workers: int = Field(1, gt=0)
     api_reload: bool = Field(False)
@@ -46,9 +47,7 @@ class Settings(BaseSettings):
     environment: Literal["development", "staging", "production"] = "production"
 
     # ── OCR ───────────────────────────────────────────────────────────────────
-    tesseract_cmd: str = Field(
-        "tesseract", description="Path or command for Tesseract binary"
-    )
+    tesseract_cmd: str = Field("tesseract", description="Path or command for Tesseract binary")
     ocr_language: str = Field("eng", description="Tesseract language code(s)")
     ocr_dpi: int = Field(300, gt=0)
 

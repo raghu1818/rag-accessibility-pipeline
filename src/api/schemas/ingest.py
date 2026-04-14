@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
-
 from pydantic import BaseModel, Field
 
 
@@ -15,4 +13,4 @@ class IngestResponse(BaseModel):
         ...,
         description="Extraction methods used: 'native' and/or 'ocr'",
     )
-    error: Optional[str] = Field(None)
+    error: str | None = Field(None)

@@ -1,4 +1,5 @@
 """Tests for PDF text extraction and OCR processor."""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -36,7 +37,7 @@ class TestPDFProcessor:
         txt_file = tmp_path / "doc.txt"
         txt_file.write_text("hello")
         processor = PDFProcessor()
-        with pytest.raises(DocumentIngestionError, match="Expected a .pdf"):
+        with pytest.raises(DocumentIngestionError, match=r"Expected a \.pdf"):
             processor.process(txt_file)
 
     def test_ocr_fallback_triggered_for_image_pages(self, tmp_path: Path) -> None:

@@ -3,6 +3,7 @@ Query endpoint.
 
 POST /query — accepts a natural-language question and returns a grounded answer.
 """
+
 from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Request, status
@@ -47,12 +48,12 @@ async def query_documents(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail=str(exc),
         ) from exc
-    except Exception:
+    except Exception as exc:
         logger.exception("unexpected_query_error")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An unexpected error occurred while processing your query.",
-        )
+        ) from exc
 
     if result.get("error"):
         raise HTTPException(

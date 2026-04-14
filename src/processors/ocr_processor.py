@@ -7,6 +7,7 @@ Pre-processing pipeline applied before OCR:
   3. Apply adaptive threshold (handles uneven illumination in scanned pages)
   4. Pass to Tesseract with page-segmentation mode 6 (uniform block of text)
 """
+
 from __future__ import annotations
 
 import io
@@ -73,9 +74,7 @@ class OCRProcessor:
         w, h = image.size
         if w < MIN_DIM or h < MIN_DIM:
             scale = max(MIN_DIM / w, MIN_DIM / h)
-            image = image.resize(
-                (int(w * scale), int(h * scale)), Image.LANCZOS
-            )
+            image = image.resize((int(w * scale), int(h * scale)), Image.LANCZOS)
 
         image = image.filter(ImageFilter.SHARPEN)
         image = ImageOps.autocontrast(image)

@@ -1,4 +1,5 @@
 """Domain exceptions — never leak internal details to API consumers."""
+
 from __future__ import annotations
 
 

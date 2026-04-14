@@ -8,6 +8,7 @@ Responsibilities:
   4. Populate state.retrieved_documents for the generation agent.
   5. Log retrieval telemetry for observability.
 """
+
 from __future__ import annotations
 
 from src.core.config import settings
@@ -34,8 +35,9 @@ class RetrievalAgent:
             return {"error": "No query provided to retrieval agent."}
 
         threshold = state.get("retrieval_score_threshold") or settings.faiss_top_k
+        score_threshold = float(threshold) if isinstance(threshold, (int, float)) else 0.3
         try:
-            docs = self._retrieve(query, score_threshold=float(threshold) if isinstance(threshold, (int, float)) else 0.3)
+            docs = self._retrieve(query, score_threshold=score_threshold)
         except RetrievalError as exc:
             logger.error("retrieval_failed", error=str(exc))
             return {"error": str(exc)}
